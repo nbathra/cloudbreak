@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.util.CollectionUtils;
 
 public abstract class RepositoryLookupService<T extends CrudRepository<?, ?>> {
 
@@ -18,11 +17,7 @@ public abstract class RepositoryLookupService<T extends CrudRepository<?, ?>> {
     @PostConstruct
     private void checkRepoMap() {
         repositoryList = getRepositoryList();
-        if (CollectionUtils.isEmpty(repositoryList)) {
-            throw new IllegalStateException("No repositories provided!");
-        } else {
-            fillRepositoryMap();
-        }
+//        fillRepositoryMap();
     }
 
     private void fillRepositoryMap() {

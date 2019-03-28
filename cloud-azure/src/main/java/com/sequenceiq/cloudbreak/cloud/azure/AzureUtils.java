@@ -61,7 +61,7 @@ public class AzureUtils {
 
     private static final String MICROSOFT_COMPUTE_VIRTUAL_MACHINES = "Microsoft.Compute/virtualMachines";
 
-    @Value("${cb.max.azure.resource.name.length:}")
+    @Value("${cb.max.azure.resource.name.length:255}")
     private int maxResourceNameLength;
 
     @Inject

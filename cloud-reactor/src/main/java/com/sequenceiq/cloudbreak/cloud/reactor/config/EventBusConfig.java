@@ -21,7 +21,7 @@ import reactor.fn.timer.Timer;
 @Configuration
 public class EventBusConfig {
 
-    @Value("${cb.eventbus.threadpool.core.size:}")
+    @Value("${cb.eventbus.threadpool.core.size:100}")
     private int eventBusThreadPoolSize;
 
     @Bean

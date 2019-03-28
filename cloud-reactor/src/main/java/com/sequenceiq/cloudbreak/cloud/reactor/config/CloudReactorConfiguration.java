@@ -12,7 +12,7 @@ import com.sequenceiq.cloudbreak.concurrent.MDCCleanerScheduledExecutor;
 @Configuration
 public class CloudReactorConfiguration {
 
-    @Value("${cb.cloud.api.executorservice.pool.size:}")
+    @Value("${cb.cloud.api.executorservice.pool.size:40}")
     private int executorServicePoolSize;
 
     @Bean

@@ -18,11 +18,6 @@ ext {
 }
 
 dependencies {
-
-  compile("com.sequenceiq:${ambariClientName}:${ambariClientVersion}") {
-    exclude group: 'org.slf4j';
-  }
-
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jersey', version: '2.0.3.RELEASE'
 
   compile group:  'org.springframework',          name: 'spring-context-support',         version: springFrameworkVersion
