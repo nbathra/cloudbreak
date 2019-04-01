@@ -102,14 +102,6 @@ cb:
     password:
     from: no-reply@sequenceiq.com
 
-  db.env:
-    user: postgres
-    pass:
-    db: cbdb
-    schema: public
-    cert.file: database.crt
-    ssl: false
-
   aws:
     spotinstances.enabled: true
     disabled.instance.types: c5d,f1,i3,m5d,p3dn,r5d,z1d

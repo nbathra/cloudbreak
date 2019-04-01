@@ -70,9 +70,9 @@ public class StackCreationService {
                 InstanceStatus.CREATE_REQUESTED, parameters, 1234L, request.getImageId());
         CloudInstance cloudInstance = new CloudInstance("asdf1234", instanceTemplate, instanceAuthentication);
         List<CloudInstance> instances = Collections.singletonList(cloudInstance);
-        Group group = new Group("testGroup", InstanceGroupType.CORE, instances, security, cloudInstance, instanceAuthentication,
+        Group group = new Group("testGroup", InstanceGroupType.GATEWAY, instances, security, cloudInstance, instanceAuthentication,
                 "coudbreak", request.getPublicKey(), 50);
-        Image image = new Image("ami-00a6ece830a9d2cfb", Collections.singletonMap(InstanceGroupType.CORE, "asdfasdfasdfasdf"), "amazonlinux2", "amazonlinux2",
+        Image image = new Image("ami-00a6ece830a9d2cfb", Collections.singletonMap(InstanceGroupType.GATEWAY, "asdfasdfasdfasdf"), "amazonlinux2", "amazonlinux2",
                 "https://cloudbreak-imagecatalog.s3.amazonaws.com/v2-prod-cb-image-catalog.json", "imagecatalog",
                 request.getImageId(), Collections.emptyMap());
         Network network = new Network(new Subnet("10.10.0.0/16"));

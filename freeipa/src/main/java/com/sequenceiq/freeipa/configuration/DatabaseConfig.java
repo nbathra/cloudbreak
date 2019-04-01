@@ -118,7 +118,7 @@ public class DatabaseConfig {
     public EntityManagerFactory entityManagerFactory() throws SQLException {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 
-        entityManagerFactory.setPackagesToScan("com.sequenceiq.freeipa.domain");
+        entityManagerFactory.setPackagesToScan("com.sequenceiq.freeipa.entity");
         entityManagerFactory.setDataSource(dataSource());
 
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());

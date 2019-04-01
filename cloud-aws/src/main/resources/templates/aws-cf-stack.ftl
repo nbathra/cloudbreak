@@ -404,7 +404,7 @@
     }
   </#if>
   <#if !existingVPC>
-    "CreatedVpc": {
+    ,"CreatedVpc": {
         "Value" : { "Ref" : "VPC" }
     }
   </#if>
