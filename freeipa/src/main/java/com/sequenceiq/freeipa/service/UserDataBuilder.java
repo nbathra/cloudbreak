@@ -54,7 +54,6 @@ public class UserDataBuilder {
         model.put("platformDiskPrefix", params.scriptParams().getDiskPrefix());
         model.put("platformDiskStartLabel", params.scriptParams().getStartLabel());
         model.put("gateway", type == InstanceGroupType.GATEWAY);
-        model.put("tmpSshKey", "#NOT_USER_ANYMORE_BUT_KEEP_FOR_BACKWARD_COMPATIBILITY");
         model.put("signaturePublicKey", BaseEncoding.base64().encode(cbSshKeyDer));
         model.put("sshUser", sshUser);
         model.put("customUserData", userDataBuilderParams.getCustomData());

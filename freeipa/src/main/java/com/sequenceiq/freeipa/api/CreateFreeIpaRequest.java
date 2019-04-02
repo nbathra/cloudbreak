@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModel;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateFreeIpaRequest {
 
+    private String name;
+
     private String secretKey;
 
     private String accessKey;
@@ -78,4 +80,13 @@ public class CreateFreeIpaRequest {
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
+

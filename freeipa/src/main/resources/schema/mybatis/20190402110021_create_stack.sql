@@ -26,8 +26,10 @@ create table stack
   platformvariant text,
   availabilityzone text,
   cloudplatform varchar(255),
-  gatewayport integer default 443,
-  publickey text
+  gatewayport integer default 9443,
+  stackauthentication_id bigint
+    constraint fk_stack_stackauthentication_id
+      references stackauthentication
 );
 
 create unique index stack_id_idx

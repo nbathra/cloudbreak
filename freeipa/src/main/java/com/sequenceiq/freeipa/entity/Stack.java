@@ -1,5 +1,6 @@
 package com.sequenceiq.freeipa.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,15 +35,16 @@ public class Stack {
     @Column(columnDefinition = "TEXT")
     private String cloudplatform;
 
-    private Integer gatewayport;
-
-    private String publickey;
+    private Integer gatewayport = 9443;
 
     @OneToMany(mappedBy = "stack", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<InstanceMetaData> instanceMetaData;
+    private Set<InstanceMetaData> instanceMetaData = new HashSet<>();
 
     @OneToOne(mappedBy = "stack", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private SecurityConfig securityConfig;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private StackAuthentication stackAuthentication;
 
     public Long getId() {
         return id;
@@ -108,14 +110,6 @@ public class Stack {
         this.gatewayport = gatewayport;
     }
 
-    public String getPublickey() {
-        return publickey;
-    }
-
-    public void setPublickey(String publickey) {
-        this.publickey = publickey;
-    }
-
     public Set<InstanceMetaData> getInstanceMetaData() {
         return instanceMetaData;
     }
@@ -130,5 +124,13 @@ public class Stack {
 
     public void setSecurityConfig(SecurityConfig securityConfig) {
         this.securityConfig = securityConfig;
+    }
+
+    public StackAuthentication getStackAuthentication() {
+        return stackAuthentication;
+    }
+
+    public void setStackAuthentication(StackAuthentication stackAuthentication) {
+        this.stackAuthentication = stackAuthentication;
     }
 }
