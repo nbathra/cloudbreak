@@ -1,17 +1,12 @@
 package com.sequenceiq.freeipa.entity;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-
-import com.sequenceiq.cloudbreak.aspect.secret.SecretValue;
-import com.sequenceiq.cloudbreak.domain.Secret;
-import com.sequenceiq.cloudbreak.domain.SecretToString;
 
 @Entity
 public class SaltSecurityConfig {
@@ -21,27 +16,21 @@ public class SaltSecurityConfig {
     @SequenceGenerator(name = "saltsecurityconfig_generator", sequenceName = "saltsecurityconfig_id_seq", allocationSize = 1)
     private Long id;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret saltPassword = Secret.EMPTY;
+    private String saltPassword;
 
     @Column(columnDefinition = "TEXT")
     private String saltSignPublicKey;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret saltSignPrivateKey = Secret.EMPTY;
+    @Column(columnDefinition = "TEXT")
+    private String saltSignPrivateKey;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret saltBootPassword = Secret.EMPTY;
+    private String saltBootPassword;
 
     @Column(columnDefinition = "TEXT")
     private String saltBootSignPublicKey;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret saltBootSignPrivateKey = Secret.EMPTY;
+    @Column(columnDefinition = "TEXT")
+    private String saltBootSignPrivateKey;
 
     @OneToOne(mappedBy = "saltSecurityConfig")
     private SecurityConfig securityConfig;
@@ -70,47 +59,43 @@ public class SaltSecurityConfig {
         this.saltBootSignPublicKey = saltBootSignPublicKey;
     }
 
-    public String getSaltBootSignPrivateKey() {
-        return saltBootSignPrivateKey.getRaw();
-    }
-
-    public void setSaltBootSignPrivateKey(String saltBootSignPrivateKey) {
-        this.saltBootSignPrivateKey = new Secret(saltBootSignPrivateKey);
-    }
-
     public String getSaltPassword() {
-        return saltPassword.getRaw();
+        return saltPassword;
     }
 
     public void setSaltPassword(String saltPassword) {
-        this.saltPassword = new Secret(saltPassword);
-    }
-
-    public String getSaltBootPassword() {
-        return saltBootPassword.getRaw();
-    }
-
-    public void setSaltBootPassword(String saltBootPassword) {
-        this.saltBootPassword = new Secret(saltBootPassword);
-    }
-
-    public void setSaltSignPublicKey(String saltSignPublicKey) {
-        this.saltSignPublicKey = saltSignPublicKey;
-    }
-
-    public void setSaltSignPrivateKey(String saltSignPrivateKey) {
-        this.saltSignPrivateKey = new Secret(saltSignPrivateKey);
-    }
-
-    public void setSaltSignPrivateKey(Secret saltSignPrivateKey) {
-        this.saltSignPrivateKey = saltSignPrivateKey;
+        this.saltPassword = saltPassword;
     }
 
     public String getSaltSignPublicKey() {
         return saltSignPublicKey;
     }
 
+    public void setSaltSignPublicKey(String saltSignPublicKey) {
+        this.saltSignPublicKey = saltSignPublicKey;
+    }
+
     public String getSaltSignPrivateKey() {
-        return saltSignPrivateKey.getRaw();
+        return saltSignPrivateKey;
+    }
+
+    public void setSaltSignPrivateKey(String saltSignPrivateKey) {
+        this.saltSignPrivateKey = saltSignPrivateKey;
+    }
+
+    public String getSaltBootPassword() {
+        return saltBootPassword;
+    }
+
+    public void setSaltBootPassword(String saltBootPassword) {
+        this.saltBootPassword = saltBootPassword;
+    }
+
+    public String getSaltBootSignPrivateKey() {
+        return saltBootSignPrivateKey;
+    }
+
+    public void setSaltBootSignPrivateKey(String saltBootSignPrivateKey) {
+        this.saltBootSignPrivateKey = saltBootSignPrivateKey;
     }
 }

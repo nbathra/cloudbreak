@@ -129,7 +129,7 @@ public class TlsSecurityService {
                 .orElseThrow(() -> new NotFoundException("Security config doesn't exist."));
         String serverCert = Optional.ofNullable(instanceMetaDataRepository.getServerCertByStackId(stackId))
                 .orElseThrow(() -> new NotFoundException("Server certificate was not found."));
-        return new CertificateV4Response(serverCert, securityConfig.getClientKeySecret(), securityConfig.getClientCertSecret());
+        return new CertificateV4Response(serverCert, securityConfig.getClientKey(), securityConfig.getClientCert());
     }
 
 }

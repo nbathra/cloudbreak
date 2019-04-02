@@ -2,17 +2,13 @@ package com.sequenceiq.freeipa.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-
-import com.sequenceiq.cloudbreak.aspect.secret.SecretValue;
-import com.sequenceiq.cloudbreak.domain.Secret;
-import com.sequenceiq.cloudbreak.domain.SecretToString;
 
 @Entity
 public class SecurityConfig {
@@ -21,16 +17,14 @@ public class SecurityConfig {
     @SequenceGenerator(name = "securityconfig_generator", sequenceName = "securityconfig_id_seq", allocationSize = 1)
     private Long id;
 
-    private Long stackId;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Stack stack;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret clientKey = Secret.EMPTY;
+    @Column(columnDefinition = "TEXT")
+    private String clientKey;
 
-    @Convert(converter = SecretToString.class)
-    @SecretValue
-    private Secret clientCert = Secret.EMPTY;
-
+    @Column(columnDefinition = "TEXT")
+    private String clientCert;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private SaltSecurityConfig saltSecurityConfig;
@@ -47,31 +41,19 @@ public class SecurityConfig {
     }
 
     public void setClientKey(String clientKey) {
-        this.clientKey = new Secret(clientKey);
-    }
-
-    public void setClientKey(Secret clientKey) {
         this.clientKey = clientKey;
     }
 
     public String getClientKey() {
-        return clientKey.getRaw();
-    }
-
-    public String getClientKeySecret() {
-        return clientKey.getSecret();
+        return clientKey;
     }
 
     public String getClientCert() {
-        return clientCert.getRaw();
-    }
-
-    public String getClientCertSecret() {
-        return clientCert.getSecret();
+        return clientCert;
     }
 
     public void setClientCert(String clientCert) {
-        this.clientCert = new Secret(clientCert);
+        this.clientCert = clientCert;
     }
 
     public SaltSecurityConfig getSaltSecurityConfig() {
@@ -90,11 +72,11 @@ public class SecurityConfig {
         this.usePrivateIpToTls = usePrivateIpToTls;
     }
 
-    public Long getStackId() {
-        return stackId;
+    public Stack getStack() {
+        return stack;
     }
 
-    public void setStackId(Long stackId) {
-        this.stackId = stackId;
+    public void setStack(Stack stack) {
+        this.stack = stack;
     }
 }

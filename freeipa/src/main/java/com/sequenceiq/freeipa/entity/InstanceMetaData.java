@@ -1,7 +1,5 @@
 package com.sequenceiq.freeipa.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,13 +7,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import com.sequenceiq.cloudbreak.api.endpoint.v4.stacks.base.InstanceMetadataType;
 import com.sequenceiq.cloudbreak.api.endpoint.v4.stacks.base.InstanceStatus;
 
 @Entity
-public class InstanceMetaData implements Serializable {
+public class InstanceMetaData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "instancemetadata_generator")
     @SequenceGenerator(name = "instancemetadata_generator", sequenceName = "instancemetadata_id_seq", allocationSize = 1)
@@ -23,7 +22,8 @@ public class InstanceMetaData implements Serializable {
 
     private Long privateId;
 
-    private Long stackId;
+    @ManyToOne
+    private Stack stack;
 
     private String privateIp;
 
@@ -32,10 +32,6 @@ public class InstanceMetaData implements Serializable {
     private Integer sshPort;
 
     private String instanceId;
-
-    private Boolean ambariServer;
-
-    private Boolean consulServer;
 
     private String discoveryFQDN;
 
@@ -106,14 +102,6 @@ public class InstanceMetaData implements Serializable {
         this.instanceId = instanceId;
     }
 
-    public Boolean getAmbariServer() {
-        return ambariServer;
-    }
-
-    public void setAmbariServer(Boolean ambariServer) {
-        this.ambariServer = ambariServer;
-    }
-
     public String getDiscoveryFQDN() {
         return discoveryFQDN;
     }
@@ -144,14 +132,6 @@ public class InstanceMetaData implements Serializable {
 
     public void setTerminationDate(Long terminationDate) {
         this.terminationDate = terminationDate;
-    }
-
-    public Boolean getConsulServer() {
-        return consulServer;
-    }
-
-    public void setConsulServer(Boolean consulServer) {
-        this.consulServer = consulServer;
     }
 
     public boolean isCreated() {
@@ -247,11 +227,11 @@ public class InstanceMetaData implements Serializable {
         this.instanceName = instanceName;
     }
 
-    public Long getStackId() {
-        return stackId;
+    public Stack getStack() {
+        return stack;
     }
 
-    public void setStackId(Long stackId) {
-        this.stackId = stackId;
+    public void setStack(Stack stack) {
+        this.stack = stack;
     }
 }
