@@ -22,32 +22,12 @@
       "displayName": "Hdfs",
       "components": [
         {
-          "name": "BALANCER",
-          "groups": ["master"],
-          "base" : true
-        },
-        {
           "name": "GATEWAY",
           "groups": ["master"],
           "base" : true
         },
         {
-          "name": "JOURNALNODE",
-          "groups": ["master", "worker"],
-          "base" : true
-        },
-        {
-          "name": "FAILOVERCONTROLLER",
-          "groups": ["master", "worker"],
-          "base" : true
-        },
-        {
-          "name": "HTTPFS",
-          "groups": ["master"],
-          "base" : true
-        },
-        {
-          "name": "NFSGATEWAY",
+          "name": "BALANCER",
           "groups": ["master"],
           "base" : true
         },
@@ -73,12 +53,12 @@
       "components": [
         {
           "name": "HIVEMETASTORE",
-          "groups": ["master", "worker"],
+          "groups": ["master"],
           "base" : true
         },
         {
           "name": "HIVESERVER2",
-          "groups": ["master", "worker"],
+          "groups": ["master"],
           "base" : true
         },
         {
@@ -118,11 +98,6 @@
           "name": "REGIONSERVER",
           "groups": ["worker", "compute"],
           "base" : true
-        },
-        {
-          "name": "HBASETHRIFTSERVER",
-          "groups": ["worker", "compute"],
-          "base" : true
         }
       ],
       "dependencies": ["ZOOKEEPER", "HDFS"]
@@ -147,8 +122,7 @@
         },
         {
           "name": "NODEMANAGER",
-          "groups": ["worker", "compute"],
-          "base" : true
+          "groups": ["worker", "compute"]
         }
       ],
       "dependencies": ["ZOOKEEPER", "HDFS"]
@@ -186,7 +160,7 @@
         },
         {
           "name": "IMPALAD",
-          "groups": ["worker", "compute"],
+          "groups": ["worker"],
           "base" : true
         }
       ],
@@ -198,7 +172,7 @@
       "components": [
         {
           "name": "KAFKA_BROKER",
-          "groups": ["master", "worker"],
+          "groups": ["master"],
           "base": true
         },
         {
@@ -248,7 +222,7 @@
         },
         {
           "name": "KUDU_TSERVER",
-          "groups": ["worker", "compute"],
+          "groups": ["worker"],
           "base": true
         }
       ],
@@ -264,7 +238,7 @@
           "base": true
         }
       ],
-      "dependencies": ["ZOOKEEPER", "HDFS", "HBASE", "KAFKA", "SOLR"]
+      "dependencies": ["ZOOKEEPER", "HDFS"]
     }
   ]
 }

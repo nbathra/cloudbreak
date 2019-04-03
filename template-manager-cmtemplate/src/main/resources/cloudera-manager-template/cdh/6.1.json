@@ -7,15 +7,13 @@
     "HBASE",
     "YARN",
     "SPARK_ON_YARN",
-    "ISILON",
     "IMPALA",
     "KAFKA",
     "FLUME",
-    "SENTRY",
-    "SPARK",
     "SOLR",
+    "KUDU",
     "SQOOP"
   ],
-  "version": "6.1",
+  "version": "6.1.1",
   "stackType": "CDH"
 }

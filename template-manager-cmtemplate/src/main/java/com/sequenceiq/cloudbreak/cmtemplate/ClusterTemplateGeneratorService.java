@@ -30,9 +30,14 @@ public class ClusterTemplateGeneratorService {
     public GeneratedClusterTemplate generateTemplateByServices(Set<String> services, String platform) {
         String generatedId = UUID.randomUUID().toString();
         String[] stackTypeAndVersionArray = getStackTypeAndVersion(platform);
+        Set<String> servicesWithDependencies = serviceDependencyMatrixService
+                .collectServiceDependencyMatrix(services, stackTypeAndVersionArray[0], stackTypeAndVersionArray[1])
+                .getDependencies()
+                .getServices();
+        servicesWithDependencies.addAll(services);
 
         return generatedClusterTemplateService.prepareClusterTemplate(
-                services,
+                servicesWithDependencies,
                 stackTypeAndVersionArray[0],
                 stackTypeAndVersionArray[1],
                 generatedId);

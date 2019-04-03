@@ -38,7 +38,7 @@ public class ClusterTemplateGeneratorConfigurationResolver implements ResourceLo
     @Value("${cb.clusterdefinition.cm.version.files:cloudera-manager-template/cdh}")
     private String cdhConfigurationsPath;
 
-    @Value("${cb.clusterdefinition.cm.services.file:cloudera-manager-template/service-definitions.json}")
+    @Value("${cb.clusterdefinition.cm.services.file:cloudera-manager-template/service-definitions-minimal.json}")
     private String serviceDefinitionConfigurationPath;
 
     private ResourceLoader resourceLoader;

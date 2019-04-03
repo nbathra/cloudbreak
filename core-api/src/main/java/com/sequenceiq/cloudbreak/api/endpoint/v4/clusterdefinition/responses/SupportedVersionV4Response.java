@@ -1,7 +1,8 @@
 package com.sequenceiq.cloudbreak.api.endpoint.v4.clusterdefinition.responses;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SupportedVersionV4Response {
 
-    private Set<SupportedServiceV4Response> services = new HashSet<>();
+    private Set<SupportedServiceV4Response> services = new TreeSet<>();
 
     private String version;
 
@@ -20,8 +21,8 @@ public class SupportedVersionV4Response {
         return services;
     }
 
-    public void setServices(Set<SupportedServiceV4Response> services) {
-        this.services = services;
+    public void setServices(Collection<SupportedServiceV4Response> services) {
+        this.services.addAll(services);
     }
 
     public String getVersion() {
