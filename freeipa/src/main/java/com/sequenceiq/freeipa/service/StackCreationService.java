@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.sequenceiq.cloudbreak.api.endpoint.v4.common.AdjustmentType;
 import com.sequenceiq.cloudbreak.api.endpoint.v4.stacks.base.InstanceGroupType;
+import com.sequenceiq.cloudbreak.api.endpoint.v4.stacks.base.InstanceMetadataType;
 import com.sequenceiq.cloudbreak.client.PkiUtil;
 import com.sequenceiq.cloudbreak.cloud.context.CloudContext;
 import com.sequenceiq.cloudbreak.cloud.event.platform.GetPlatformTemplateRequest;
@@ -40,10 +41,12 @@ import com.sequenceiq.cloudbreak.cloud.model.Subnet;
 import com.sequenceiq.cloudbreak.cloud.model.Volume;
 import com.sequenceiq.cloudbreak.service.OperationException;
 import com.sequenceiq.freeipa.api.CreateFreeIpaRequest;
+import com.sequenceiq.freeipa.entity.InstanceMetaData;
 import com.sequenceiq.freeipa.entity.SaltSecurityConfig;
 import com.sequenceiq.freeipa.entity.SecurityConfig;
 import com.sequenceiq.freeipa.entity.Stack;
 import com.sequenceiq.freeipa.entity.StackAuthentication;
+import com.sequenceiq.freeipa.repository.InstanceMetaDataRepository;
 import com.sequenceiq.freeipa.repository.SaltSecurityConfigRepository;
 import com.sequenceiq.freeipa.repository.SecurityConfigRepository;
 import com.sequenceiq.freeipa.repository.StackAuthenticationRepository;
@@ -76,10 +79,14 @@ public class StackCreationService {
     @Inject
     private StackAuthenticationRepository stackAuthenticationRepository;
 
+    @Inject
+    private InstanceMetaDataRepository instanceMetaDataRepository;
+
     public void launchStack(CreateFreeIpaRequest request) {
         Stack stack = createStack(request);
+        saveInstanceMetadata(stack);
         Location location = Location.location(Region.region(request.getRegion()), AvailabilityZone.availabilityZone(request.getAvailabilityZone()));
-        CloudContext cloudCtx = new CloudContext(1L, request.getName(), "AWS", "AWS", location, "1", 1L);
+        CloudContext cloudCtx = new CloudContext(stack.getId(), request.getName(), "AWS", "AWS", location, "1", 1L);
         CloudCredential cloudCredential = new CloudCredential(1L, "aws-key",
                 Map.of("accessKey", request.getAccessKey(),
                         "secretKey", request.getSecretKey(),
@@ -97,7 +104,7 @@ public class StackCreationService {
         }
 
         Security security = new Security(Collections.singletonList(new SecurityRule("0.0.0.0/0",
-                new PortDefinition[] {new PortDefinition("22", "22")}, "TCP")), Collections.emptyList());
+                new PortDefinition[] {new PortDefinition("22", "22"), new PortDefinition("9443", "9443")}, "TCP")), Collections.emptyList());
         InstanceAuthentication instanceAuthentication = new InstanceAuthentication(request.getPublicKey(), null, "cloudbreak");
         List<Volume> volumes = Collections.singletonList(new Volume("/mnt/vol","standard", 100));
         Map<String, Object> parameters = Collections.emptyMap();
@@ -117,6 +124,13 @@ public class StackCreationService {
                 request.getPublicKey(), null);
         LaunchStackRequest launchStackRequest = new LaunchStackRequest(cloudCtx, cloudCredential, cloudStack, AdjustmentType.EXACT, 1L);
         eventBus.notify(launchStackRequest.selector(), new Event<>(launchStackRequest));
+    }
+
+    private void saveInstanceMetadata(Stack stack) {
+        InstanceMetaData instanceMetaData = new InstanceMetaData();
+        instanceMetaData.setStack(stack);
+        instanceMetaData.setInstanceMetadataType(InstanceMetadataType.GATEWAY_PRIMARY);
+        instanceMetaDataRepository.save(instanceMetaData);
     }
 
     private Map<InstanceGroupType, String> userData(Stack stack, CloudContext cloudContext, CloudCredential cloudCredential) {
