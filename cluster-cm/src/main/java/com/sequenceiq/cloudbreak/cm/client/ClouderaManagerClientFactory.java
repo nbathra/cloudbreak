@@ -2,6 +2,7 @@ package com.sequenceiq.cloudbreak.cm.client;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.cloudera.api.swagger.AuthRolesResourceApi;
@@ -24,8 +25,12 @@ public class ClouderaManagerClientFactory {
     }
 
     public ApiClient getClient(Stack stack, Cluster cluster, HttpClientConfig clientConfig) {
-        return clouderaManagerClientProvider.getClouderaManagerClient(clientConfig,
-                stack.getGatewayPort(), cluster.getCloudbreakAmbariUser(), cluster.getCloudbreakAmbariPassword());
+        if (StringUtils.isNoneBlank(cluster.getCloudbreakAmbariUser(), cluster.getCloudbreakAmbariPassword())) {
+            return clouderaManagerClientProvider.getClouderaManagerClient(clientConfig,
+                    stack.getGatewayPort(), cluster.getCloudbreakAmbariUser(), cluster.getCloudbreakAmbariPassword());
+        } else {
+            return getDefaultClient(stack, clientConfig);
+        }
     }
 
     public ApiClient getClient(Stack stack, String username, String password, HttpClientConfig clientConfig) {

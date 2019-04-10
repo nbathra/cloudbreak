@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -18,9 +19,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.cloudera.api.swagger.ClustersResourceApi;
+import com.cloudera.api.swagger.HostsResourceApi;
 import com.cloudera.api.swagger.client.ApiClient;
 import com.cloudera.api.swagger.client.ApiException;
 import com.cloudera.api.swagger.model.ApiCommand;
+import com.cloudera.api.swagger.model.ApiHost;
+import com.cloudera.api.swagger.model.ApiHostRef;
+import com.cloudera.api.swagger.model.ApiHostRefList;
 import com.sequenceiq.cloudbreak.client.HttpClientConfig;
 import com.sequenceiq.cloudbreak.cloud.model.component.StackRepoDetails;
 import com.sequenceiq.cloudbreak.cloud.scheduler.CancellationException;
@@ -73,7 +78,35 @@ public class ClouderaManagerModificationService implements ClusterModificationSe
     }
 
     @Override
-    public void upscaleCluster(HostGroup hostGroup, Collection<HostMetadata> hostMetadata, List<InstanceMetaData> metas) {
+    public void upscaleCluster(HostGroup hostGroup, Collection<HostMetadata> hostMetadata, List<InstanceMetaData> instanceMetaDatas)
+            throws CloudbreakException {
+        ClustersResourceApi clustersResourceApi = new ClustersResourceApi(client);
+        try {
+            List<ApiHostRef> hostRefs = clustersResourceApi.listHosts(stack.getName()).getItems();
+            List<String> clusterHosts = hostRefs.stream().map(ApiHostRef::getHostname).collect(Collectors.toList());
+            List<String> upscaleHostNames = hostMetadata.stream()
+                    .map(HostMetadata::getHostName)
+                    .filter(hostname -> !clusterHosts.contains(hostname))
+                    .collect(Collectors.toList());
+            if (!upscaleHostNames.isEmpty()) {
+                List<ApiHost> hosts = new HostsResourceApi(client).readHosts("SUMMARY").getItems();
+                ApiHostRefList body = new ApiHostRefList();
+                upscaleHostNames.forEach(hostname -> {
+                    String hostId = hosts.stream()
+                            .filter(host -> hostname.equalsIgnoreCase(host.getHostname()))
+                            .findFirst().get()
+                            .getHostId();
+                    body.addItemsItem(
+                            new ApiHostRef().hostname(hostname).hostId(hostId));
+                });
+                clustersResourceApi.addHosts(stack.getName(), body);
+                clustersResourceApi.deployClientConfig(stack.getName());
+                // TODO: add host to hostgroups: OPSAPS-49350
+            }
+        } catch (ApiException e) {
+            LOGGER.warn("Failed to upscale", e);
+            throw new CloudbreakException("Failed to upscale", e);
+        }
 
     }
 

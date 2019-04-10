@@ -127,8 +127,6 @@ public class AmbariClusterModificationService implements ClusterModificationServ
         List<String> upscaleHostNames = hostMetadata
                 .stream()
                 .map(HostMetadata::getHostName)
-                .collect(Collectors.toList())
-                .stream()
                 .filter(hostName -> !ambariClient.getClusterHosts().contains(hostName))
                 .collect(Collectors.toList());
         if (!upscaleHostNames.isEmpty()) {
