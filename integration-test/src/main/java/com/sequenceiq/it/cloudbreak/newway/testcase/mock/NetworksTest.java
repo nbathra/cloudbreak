@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -28,9 +27,9 @@ public class NetworksTest extends AbstractIntegrationTest {
     @Inject
     private CredentialTestClient credentialTestClient;
 
-    @BeforeMethod
-    public void beforeMethod(Object[] data) {
-        createDefaultUser((TestContext) data[0]);
+    @Override
+    protected void setupTest(TestContext testContext) {
+        createDefaultUser(testContext);
     }
 
     @Test(dataProvider = TEST_CONTEXT_WITH_MOCK)
@@ -39,7 +38,7 @@ public class NetworksTest extends AbstractIntegrationTest {
             when = "list networks",
             then = "getting back a network list")
     public void testGetPlatformNetworksByCredentialName(MockedTestContext testContext) {
-        String credentialName = getNameGenerator().getRandomNameForResource();
+        String credentialName = resourcePropertyProvider().getName();
         testContext
                 .given(CredentialTestDto.class)
                 .withName(credentialName)
@@ -55,7 +54,7 @@ public class NetworksTest extends AbstractIntegrationTest {
             String credentialName,
             Class<Exception> exception,
             @Description TestCaseDescription testCaseDescription) {
-        String exceptionKey = getNameGenerator().getRandomNameForResource();
+        String exceptionKey = resourcePropertyProvider().getName();
 
         testContext
                 .given(PlatformNetworksTestDto.class)
