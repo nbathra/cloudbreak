@@ -8,27 +8,15 @@ public enum WorkspaceResource {
     CREDENTIAL("Credential", "credential"),
     RECIPE("Recipe", "recipe"),
     STACK("Stack", "stack"),
-    STACK_TEMPLATE("Stack template", "stacktemplate"),
     LDAP("LDAP config", "ldap"),
     DATABASE("database config", "database"),
     PROXY("Proxy config", "proxy"),
     MPACK("MPACK resource", "mpack"),
     KUBERNETES("Kubernetes config", "kube"),
     STRUCTURED_EVENT("Structured event resource", "structuredevent"),
-    NETWORK("Network", "network"),
-    TOPOLOGY("Topology", "topology"),
-    SECURITY_GROUP("Security group", "securitygroup"),
-    CONSTRAINT_TEMPLATE("Constraint template", "constrainttemplate"),
-    FILESYSTEM("File system", "filesystem"),
     CLUSTER_TEMPLATE("Cluster template", "clustertemplate"),
     ENVIRONMENT("Environment", "env"),
-    GATEWAY("Gateway", "gateway"),
-    KERBEROS_CONFIG("Kerberos Config", "krbconf"),
-    GENERATED_RECIPE("Generated recipe", "generatedrecipe"),
-    SECURITY_CONFIG("Security Config", "securityconfig"),
-    SALT_SECURITY_CONFIG("Salt Security Config", "saltsecurityconfig"),
-    DATALAKE_RESOURCES("Datalake resources", "datalakeresources"),
-    SERVICE_DESCRIPTOR("Service Descriptor", "servicedescriptor");
+    KERBEROS_CONFIG("Kerberos Config", "krbconf");
 
     private final String readableName;
 
